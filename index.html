@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <title>Lanchonete Express</title>
+  <!-- Ícones Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  
+<nav><ul class="nav-menu">
+                <li class="nav-item"><a href="#home" class="nav-link">Início</a></li>
+                <li class="nav-item"><a href="#cardapio" class="nav-link">Cardápio</a></li>
+                <li class="nav-item"><a href="#sobre" class="nav-link">Sobre Nós</a></li>
+                <li class="nav-item"><a href="#avaliacoes" class="nav-link">Avaliações</a></li>
+                <li class="nav-item"><a href="#contato" class="nav-link">Fale Conosco</a></li>
+                <!-- Botão Chamativo de Pedido -->
+                <li class="nav-item">
+                    <a href="#pedir" class="btn-pedido"></nav>
+
+  <!-- Cabeçalho -->
+  <header class="navbar">
+    <div class="logo">
+      <i class="ph ph-hamburger"></i>
+      <span>Lanchonete Express</span>
+    </div>
+    <div class="nav-actions">
+      <button id="btn-carrinho" class="btn-icon">
+        <i class="ph ph-shopping-cart"></i>
+        <span id="cart-count">0</span>
+      </button>
+      <button id="btn-admin" class="btn-secondary">
+        <i class="ph ph-chart-bar"></i> Painel / Fechamento
+      </button>
+    </div>
+  </header>
+
+
+  
+
+  <!-- Conteúdo Principal / Cardápio -->
+  <main class="container">
+    <section class="menu-section">
+      <h2>Nosso Cardápio</h2>
+      <div class="menu-grid" id="menu-grid">
+        <!-- Itens do cardápio inseridos via JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal do Carrinho de Compras -->
+  <div class="modal" id="modal-carrinho">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="ph ph-shopping-cart-simple"></i> Meu Pedido</h3>
+        <span class="close-btn" id="close-carrinho">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="cart-items" class="cart-items-list">
+          <!-- Itens do carrinho inseridos via JS -->
+        </div>
+        
+        <div class="cart-summary">
+          <div class="total-row">
+            <span>Total:</span>
+            <strong id="cart-total">R$ 0,00</strong>
+          </div>
+
+          <form id="form-checkout" class="checkout-form">
+            <label for="client-name">Nome:</label>
+            <input type="text" id="client-name" placeholder="Seu nome" required>
+
+            <label for="payment-method">Forma de Pagamento:</label>
+            <select id="payment-method" required>
+              <option value="Pix">Pix</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="Dinheiro">Dinheiro</option>
+            </select>
+
+            <label for="order-type">Tipo de Pedido:</label>
+            <select id="order-type" required>
+              <option value="Entrega">Entrega (Delivery)</option>
+              <option value="Retirada">Retirada no Balcão</option>
+              <option value="Mesa">Comer no Local</option>
+            </select>
+
+            <button type="submit" class="btn-primary btn-block">
+              <i class="ph ph-whatsapp-logo"></i> Confirmar e Enviar Pedido
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal do Painel de Gestão e Fechamento do Dia -->
+  <div class="modal" id="modal-admin">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h3><i class="ph ph-receipt"></i> Controle e Fechamento do Dia</h3>
+        <span class="close-btn" id="close-admin">&times;</span>
+      </div>
+      <div class="modal-body">
+        <!-- Indicadores de Desempenho (KPIs) -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <h4>Faturamento Total</h4>
+            <p id="kpi-revenue">R$ 0,00</p>
+          </div>
+          <div class="kpi-card">
+            <h4>Pedidos Realizados</h4>
+            <p id="kpi-orders">0</p>
+          </div>
+          <div class="kpi-card">
+            <h4>Ticket Médio</h4>
+            <p id="kpi-avg">R$ 0,00</p>
+          </div>
+        </div>
+
+        <div class="admin-actions">
+          <button id="btn-close-shift" class="btn-danger">
+            <i class="ph ph-lock-key"></i> Encerrar Expediente Hoje
+          </button>
+        </div>
+
+        <!-- Histórico de Vendas do Dia -->
+        <h4>Histórico de Pedidos do Dia</h4>
+        <div class="table-responsive">
+          <table class="sales-table">
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Cliente</th>
+                <th>Tipo</th>
+                <th>Pagamento</th>
+                <th>Itens</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="sales-history-body">
+              <!-- Histórico via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Relatório de Fechamento Emitido -->
+        <div id="report-output" class="report-box hidden">
+          <h4><i class="ph ph-file-text"></i> Relatório de Fechamento do Expediente</h4>
+          <pre id="report-text"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
