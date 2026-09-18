@@ -1,16 +1,16 @@
-// --- 1. BASE DE DADOS DO CARDÁPIO ---
+// --- 1. BASE DE DADOS DO CARDÁPIO COM CATEGORIAS ---
 const menuData = [
-  { id: 1, name: "X-Burguer Artesanal", price: 25.00, desc: "Pão brioche, carne 180g, queijo cheddar e molho especial.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
-  { id: 2, name: "X-Salada Especial", price: 22.00, desc: "Hamburguer 150g, queijo, alface, tomate e maionese da casa.", img: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400" },
-  { id: 3, name: "Batata Frita Grande", price: 16.00, desc: "Porção de batata frita crocante com bacon e cheddar.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" },
-  { id: 4, name: "Refrigerante Lata 350ml", price: 6.00, desc: "Coca-Cola, Guaraná ou Soda.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400" },
-  { id: 5, name: "Suco Natural 500ml", price: 8.50, desc: "Sabores: Laranja, Limão ou Maracujá.", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=400" }
+  { id: 1, category: "burgers", name: "X-Burguer Artesanal", price: 25.00, desc: "Pão brioche, carne 180g, queijo cheddar e molho especial.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
+  { id: 2, category: "burgers", name: "X-Salada Especial", price: 22.00, desc: "Hamburguer 150g, queijo, alface, tomate e maionese da casa.", img: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400" },
+  { id: 3, category: "acompanhamentos", name: "Batata Frita Grande", price: 16.00, desc: "Porção de batata frita crocante com bacon e cheddar.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" },
+  { id: 4, category: "bebidas", name: "Refrigerante Lata 350ml", price: 6.00, desc: "Coca-Cola, Guaraná ou Soda.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400" },
+  { id: 5, category: "bebidas", name: "Suco Natural 500ml", price: 8.50, desc: "Sabores: Laranja, Limão ou Maracujá.", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=400" }
 ];
 
 // --- 2. ESTADO DA APLICAÇÃO ---
 let cart = [];
-// Recupera histórico de vendas salvas hoje ou inicia um array vazio
 let salesHistory = JSON.parse(localStorage.getItem("salesHistory")) || [];
+let currentCategory = "todos";
 
 // --- 3. REFERÊNCIAS DO DOM ---
 const menuGrid = document.getElementById("menu-grid");
@@ -38,14 +38,20 @@ const reportText = document.getElementById("report-text");
 // --- 4. INICIALIZAÇÃO ---
 document.addEventListener("DOMContentLoaded", () => {
   renderMenu();
+  setupCategoryFilters();
   updateCart();
   updateDashboard();
 });
 
-// Renderizar itens do Cardápio
-function renderMenu() {
+// Renderizar itens do Cardápio com filtro
+function renderMenu(category = "todos") {
   menuGrid.innerHTML = "";
-  menuData.forEach(item => {
+  
+  const filtered = category === "todos" 
+    ? menuData 
+    : menuData.filter(item => item.category === category);
+
+  filtered.forEach(item => {
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
@@ -65,6 +71,18 @@ function renderMenu() {
   });
 }
 
+// Ouvintes para os botões de filtro
+function setupCategoryFilters() {
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentCategory = btn.dataset.category;
+      renderMenu(currentCategory);
+    });
+  });
+}
+
 // --- 5. LÓGICA DO CARRINHO ---
 function addToCart(id) {
   const product = menuData.find(p => p.id === id);
@@ -76,6 +94,12 @@ function addToCart(id) {
     cart.push({ ...product, qty: 1 });
   }
   updateCart();
+
+  btnCarrinho.animate([
+    { transform: 'scale(1)' },
+    { transform: 'scale(1.3)' },
+    { transform: 'scale(1)' }
+  ], { duration: 250 });
 }
 
 function changeQty(id, delta) {
@@ -125,7 +149,53 @@ function updateCart() {
   cartTotal.textContent = `R$ ${totalCalculated.toFixed(2).replace('.', ',')}`;
 }
 
-// --- 6. CHECKOUT E ENVIO DE PEDIDO ---
+// --- 6. CHECKOUT E COMPORTAMENTO DINÂMICO ---
+
+// Elementos dos campos condicionais
+const orderTypeSelect = document.getElementById("order-type");
+const groupDelivery = document.getElementById("group-delivery");
+const groupTable = document.getElementById("group-table");
+const inputAddress = document.getElementById("client-address");
+const inputTable = document.getElementById("client-table");
+
+const paymentMethodSelect = document.getElementById("payment-method");
+const groupCash = document.getElementById("group-cash");
+const inputCashChange = document.getElementById("cash-change");
+
+// Alternar campos conforme o Tipo de Pedido (Delivery, Mesa ou Balcão)
+orderTypeSelect.addEventListener("change", () => {
+  const selectedType = orderTypeSelect.value;
+  
+  if (selectedType.includes("Delivery")) {
+    groupDelivery.classList.remove("hidden");
+    groupTable.classList.add("hidden");
+    inputAddress.required = true;
+    inputTable.required = false;
+  } else if (selectedType.includes("Mesa")) {
+    groupDelivery.classList.add("hidden");
+    groupTable.classList.remove("hidden");
+    inputAddress.required = false;
+    inputTable.required = true;
+  } else {
+    // Retirada no balcão
+    groupDelivery.classList.add("hidden");
+    groupTable.classList.add("hidden");
+    inputAddress.required = false;
+    inputTable.required = false;
+  }
+});
+
+// Alternar campo de troco conforme a Forma de Pagamento
+paymentMethodSelect.addEventListener("change", () => {
+  if (paymentMethodSelect.value === "Dinheiro") {
+    groupCash.classList.remove("hidden");
+  } else {
+    groupCash.classList.add("hidden");
+    inputCashChange.value = "";
+  }
+});
+
+// Envio do Pedido
 document.getElementById("form-checkout").addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -135,14 +205,18 @@ document.getElementById("form-checkout").addEventListener("submit", (e) => {
   }
 
   const clientName = document.getElementById("client-name").value;
-  const paymentMethod = document.getElementById("payment-method").value;
-  const orderType = document.getElementById("order-type").value;
+  const orderType = orderTypeSelect.value;
+  const address = inputAddress.value.trim();
+  const tableNum = inputTable.value.trim();
+  const paymentMethod = paymentMethodSelect.value;
+  const cashChange = inputCashChange.value.trim();
+  const orderNotes = document.getElementById("order-notes").value.trim();
   
   const totalValue = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
   const now = new Date();
   const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  // Criar Objeto do Pedido
+  // Criar Objeto do Pedido para o painel de gestão
   const newOrder = {
     id: Date.now(),
     time: timeString,
@@ -153,34 +227,55 @@ document.getElementById("form-checkout").addEventListener("submit", (e) => {
     total: totalValue
   };
 
-  // Salva no histórico de vendas (Automação do Financeiro)
+  // Salvar no histórico
   salesHistory.push(newOrder);
   localStorage.setItem("salesHistory", JSON.stringify(salesHistory));
 
-  // Gerar mensagem para WhatsApp
-  let message = `*--- NOVO PEDIDO ---*\n`;
-  message += `*Cliente:* ${clientName}\n`;
-  message += `*Tipo:* ${orderType}\n`;
-  message += `*Pagamento:* ${paymentMethod}\n\n`;
-  message += `*Itens:*\n`;
-  
+  // Montar mensagem formatada e limpa para o WhatsApp
+  let message = `🍔 *NOVO PEDIDO - LANCHONETE EXPRESS*\n`;
+  message += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  message += `👤 *Cliente:* ${clientName}\n`;
+  message += `📍 *Tipo:* ${orderType}\n`;
+
+  if (orderType.includes("Delivery") && address) {
+    message += `🏠 *Endereço:* ${address}\n`;
+  } else if (orderType.includes("Mesa") && tableNum) {
+    message += `🪑 *Mesa:* Nº ${tableNum}\n`;
+  }
+
+  message += `💳 *Pagamento:* ${paymentMethod}\n`;
+  if (paymentMethod === "Dinheiro" && cashChange) {
+    message += `💵 *Troco para:* ${cashChange}\n`;
+  }
+
+  if (orderNotes) {
+    message += `📝 *Observação:* ${orderNotes}\n`;
+  }
+
+  message += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  message += `🛒 *ITENS DO PEDIDO:*\n`;
   cart.forEach(item => {
-    message += `- ${item.qty}x ${item.name} (R$ ${(item.price * item.qty).toFixed(2)})\n`;
+    message += `▪ ${item.qty}x ${item.name} — R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}\n`;
   });
-  
-  message += `\n*Total: R$ ${totalValue.toFixed(2)}*`;
+
+  message += `━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  message += `💰 *TOTAL: R$ ${totalValue.toFixed(2).replace('.', ',')}*\n`;
 
   // Limpar carrinho e fechar modal
   cart = [];
   updateCart();
   document.getElementById("form-checkout").reset();
-  modalCarrinho.classList.remove("active");
+  
+  // Reseta campos visíveis para o padrão (Delivery visível, Troco escondido)
+  groupDelivery.classList.remove("hidden");
+  groupTable.classList.add("hidden");
+  groupCash.classList.add("hidden");
 
-  // Atualizar os relatórios em tempo real
+  modalCarrinho.classList.remove("active");
   updateDashboard();
 
-  // Redirecionar para WhatsApp (Substituir '5581999999999' pelo seu número real)
-  const phone = "5581999999999";
+  // Coloque o número com DDD para o teste ao vivo
+  const phone = "5581999999999"; 
   const encodedMessage = encodeURIComponent(message);
   window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_blank');
 });

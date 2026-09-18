@@ -53,6 +53,23 @@
   <main class="container" id="cardapio">
     <section class="menu-section">
       <h2>Nosso Cardápio</h2>
+
+      <!-- Filtros Rápidos por Categoria -->
+      <div class="category-filters">
+        <button class="filter-btn active" data-category="todos">
+          <i class="ph ph-squares-four"></i> Todos
+        </button>
+        <button class="filter-btn" data-category="burgers">
+          <i class="ph ph-hamburger"></i> Hambúrgueres
+        </button>
+        <button class="filter-btn" data-category="acompanhamentos">
+          <i class="ph ph-french-fries"></i> Porções
+        </button>
+        <button class="filter-btn" data-category="bebidas">
+          <i class="ph ph-brand-revolut"></i> Bebidas
+        </button>
+      </div>
+
       <div class="menu-grid" id="menu-grid">
         <!-- Renderizado dinamicamente pelo JS -->
       </div>
@@ -76,11 +93,35 @@
           </div>
 
           <form id="form-checkout" class="checkout-form">
+            <!-- Nome -->
             <div class="form-group">
               <label for="client-name">Seu Nome:</label>
               <input type="text" id="client-name" placeholder="Ex: Maria Clara" required>
             </div>
 
+            <!-- Tipo de Pedido -->
+            <div class="form-group">
+              <label for="order-type">Tipo de Pedido:</label>
+              <select id="order-type" required>
+                <option value="Entrega (Delivery)">Entrega (Delivery)</option>
+                <option value="Comer no Local (Mesa)">Comer no Local (Mesa)</option>
+                <option value="Retirada no Balcão">Retirada no Balcão</option>
+              </select>
+            </div>
+
+            <!-- Campo Dinâmico: Endereço (Aparece se Delivery) -->
+            <div class="form-group" id="group-delivery">
+              <label for="client-address">Endereço e Ponto de Referência:</label>
+              <input type="text" id="client-address" placeholder="Rua, Número, Bairro, Apto/Bloco e Referência">
+            </div>
+
+            <!-- Campo Dinâmico: Mesa (Aparece se Mesa) -->
+            <div class="form-group hidden" id="group-table">
+              <label for="client-table">Número da Mesa:</label>
+              <input type="number" id="client-table" placeholder="Ex: 04" min="1">
+            </div>
+
+            <!-- Forma de Pagamento -->
             <div class="form-group">
               <label for="payment-method">Forma de Pagamento:</label>
               <select id="payment-method" required>
@@ -91,13 +132,16 @@
               </select>
             </div>
 
+            <!-- Campo Dinâmico: Troco (Aparece se Dinheiro) -->
+            <div class="form-group hidden" id="group-cash">
+              <label for="cash-change">Troco para quanto? (Deixe em branco se não precisar):</label>
+              <input type="text" id="cash-change" placeholder="Ex: R$ 50,00 ou Não preciso">
+            </div>
+
+            <!-- Observações Gerais do Pedido -->
             <div class="form-group">
-              <label for="order-type">Tipo de Pedido:</label>
-              <select id="order-type" required>
-                <option value="Entrega (Delivery)">Entrega (Delivery)</option>
-                <option value="Retirada no Balcão">Retirada no Balcão</option>
-                <option value="Comer no Local (Mesa)">Comer no Local (Mesa)</option>
-              </select>
+              <label for="order-notes">Observações do Pedido (Opcional):</label>
+              <input type="text" id="order-notes" placeholder="Ex: Carne bem passada, sem cebola, maionese à parte">
             </div>
 
             <button type="submit" class="btn-primary btn-block">
