@@ -3,54 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="index.css">
   <title>Lanchonete Express</title>
-  <!-- Ícones Phosphor Icons -->
+  <link rel="stylesheet" href="index.css">
+  <!-- Google Fonts & Phosphor Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
-  
-<nav><ul class="nav-menu">
-                <li class="nav-item"><a href="#home" class="nav-link">Início</a></li>
-                <li class="nav-item"><a href="#cardapio" class="nav-link">Cardápio</a></li>
-                <li class="nav-item"><a href="#sobre" class="nav-link">Sobre Nós</a></li>
-                <li class="nav-item"><a href="#avaliacoes" class="nav-link">Avaliações</a></li>
-                <li class="nav-item"><a href="#contato" class="nav-link">Fale Conosco</a></li>
-                <!-- Botão Chamativo de Pedido -->
-                <li class="nav-item">
-                    <a href="#pedir" class="btn-pedido"></nav>
 
-  <!-- Cabeçalho -->
-  <header class="navbar">
-    <div class="logo">
-      <i class="ph ph-hamburger"></i>
-      <span>Lanchonete Express</span>
-    </div>
-    <div class="nav-actions">
-      <button id="btn-carrinho" class="btn-icon">
-        <i class="ph ph-shopping-cart"></i>
-        <span id="cart-count">0</span>
-      </button>
-      <button id="btn-admin" class="btn-secondary">
-        <i class="ph ph-chart-bar"></i> Painel / Fechamento
-      </button>
+  <!-- Header & Navbar Unificados -->
+  <header class="header">
+    <div class="navbar">
+      <div class="logo">
+        <a href="#home">
+          <i class="ph ph-hamburger"></i>
+          <span>Lanchonete Express</span>
+        </a>
+      </div>
+
+      <ul class="nav-menu">
+        <li><a href="#home" class="nav-link">Início</a></li>
+        <li><a href="#cardapio" class="nav-link">Cardápio</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button id="btn-carrinho" class="btn-icon" title="Ver Carrinho">
+          <i class="ph ph-shopping-cart"></i>
+          <span id="cart-count">0</span>
+        </button>
+        <button id="btn-admin" class="btn-secondary">
+          <i class="ph ph-chart-bar"></i> Gestão do Dia
+        </button>
+      </div>
     </div>
   </header>
 
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <h1>O Melhor Sabor da Cidade</h1>
+    <p>Hambúrgueres artesanais montados na hora com os melhores ingredientes selecionados.</p>
+    <a href="#cardapio" class="btn-pedido">
+      <i class="ph ph-fire"></i> Fazer Pedido Agora
+    </a>
+  </section>
 
-  
-
-  <!-- Conteúdo Principal / Cardápio -->
-  <main class="container">
+  <!-- Cardápio Principal -->
+  <main class="container" id="cardapio">
     <section class="menu-section">
       <h2>Nosso Cardápio</h2>
       <div class="menu-grid" id="menu-grid">
-        <!-- Itens do cardápio inseridos via JavaScript -->
+        <!-- Renderizado dinamicamente pelo JS -->
       </div>
     </section>
   </main>
 
-  <!-- Modal do Carrinho de Compras -->
+  <!-- Modal: Carrinho de Compras -->
   <div class="modal" id="modal-carrinho">
     <div class="modal-content">
       <div class="modal-header">
@@ -58,9 +67,7 @@
         <span class="close-btn" id="close-carrinho">&times;</span>
       </div>
       <div class="modal-body">
-        <div id="cart-items" class="cart-items-list">
-          <!-- Itens do carrinho inseridos via JS -->
-        </div>
+        <div id="cart-items" class="cart-items-list"></div>
         
         <div class="cart-summary">
           <div class="total-row">
@@ -69,26 +76,32 @@
           </div>
 
           <form id="form-checkout" class="checkout-form">
-            <label for="client-name">Nome:</label>
-            <input type="text" id="client-name" placeholder="Seu nome" required>
+            <div class="form-group">
+              <label for="client-name">Seu Nome:</label>
+              <input type="text" id="client-name" placeholder="Ex: Maria Clara" required>
+            </div>
 
-            <label for="payment-method">Forma de Pagamento:</label>
-            <select id="payment-method" required>
-              <option value="Pix">Pix</option>
-              <option value="Cartão de Crédito">Cartão de Crédito</option>
-              <option value="Cartão de Débito">Cartão de Débito</option>
-              <option value="Dinheiro">Dinheiro</option>
-            </select>
+            <div class="form-group">
+              <label for="payment-method">Forma de Pagamento:</label>
+              <select id="payment-method" required>
+                <option value="Pix">Pix</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Cartão de Débito">Cartão de Débito</option>
+                <option value="Dinheiro">Dinheiro</option>
+              </select>
+            </div>
 
-            <label for="order-type">Tipo de Pedido:</label>
-            <select id="order-type" required>
-              <option value="Entrega">Entrega (Delivery)</option>
-              <option value="Retirada">Retirada no Balcão</option>
-              <option value="Mesa">Comer no Local</option>
-            </select>
+            <div class="form-group">
+              <label for="order-type">Tipo de Pedido:</label>
+              <select id="order-type" required>
+                <option value="Entrega (Delivery)">Entrega (Delivery)</option>
+                <option value="Retirada no Balcão">Retirada no Balcão</option>
+                <option value="Comer no Local (Mesa)">Comer no Local (Mesa)</option>
+              </select>
+            </div>
 
             <button type="submit" class="btn-primary btn-block">
-              <i class="ph ph-whatsapp-logo"></i> Confirmar e Enviar Pedido
+              <i class="ph ph-whatsapp-logo"></i> Finalizar no WhatsApp
             </button>
           </form>
         </div>
@@ -96,7 +109,7 @@
     </div>
   </div>
 
-  <!-- Modal do Painel de Gestão e Fechamento do Dia -->
+  <!-- Modal: Fechamento de Caixa e Gestão -->
   <div class="modal" id="modal-admin">
     <div class="modal-content modal-large">
       <div class="modal-header">
@@ -104,7 +117,6 @@
         <span class="close-btn" id="close-admin">&times;</span>
       </div>
       <div class="modal-body">
-        <!-- Indicadores de Desempenho (KPIs) -->
         <div class="kpi-grid">
           <div class="kpi-card">
             <h4>Faturamento Total</h4>
@@ -126,8 +138,7 @@
           </button>
         </div>
 
-        <!-- Histórico de Vendas do Dia -->
-        <h4>Histórico de Pedidos do Dia</h4>
+        <h4 class="section-subtitle">Histórico de Pedidos Registrados</h4>
         <div class="table-responsive">
           <table class="sales-table">
             <thead>
@@ -140,15 +151,12 @@
                 <th>Total</th>
               </tr>
             </thead>
-            <tbody id="sales-history-body">
-              <!-- Histórico via JS -->
-            </tbody>
+            <tbody id="sales-history-body"></tbody>
           </table>
         </div>
 
-        <!-- Relatório de Fechamento Emitido -->
         <div id="report-output" class="report-box hidden">
-          <h4><i class="ph ph-file-text"></i> Relatório de Fechamento do Expediente</h4>
+          <h4><i class="ph ph-file-text"></i> Relatório de Fechamento Emitido</h4>
           <pre id="report-text"></pre>
         </div>
       </div>

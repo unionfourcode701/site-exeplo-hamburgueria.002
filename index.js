@@ -180,7 +180,7 @@ document.getElementById("form-checkout").addEventListener("submit", (e) => {
   updateDashboard();
 
   // Redirecionar para WhatsApp (Substituir '5581999999999' pelo seu número real)
-  const phone = "5581999999999"; 
+  const phone = "5581999999999";
   const encodedMessage = encodeURIComponent(message);
   window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_blank');
 });

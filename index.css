@@ -1,6 +1,4 @@
-
 :root {
-  /* Paleta de Cores Neo-Neon */
   --primary: #ff7b00;
   --primary-glow: rgba(255, 123, 0, 0.4);
   --secondary: #00f2fe;
@@ -9,154 +7,118 @@
   --danger: #ff0055;
   --danger-glow: rgba(255, 0, 85, 0.4);
 
-  /* Superfícies & Vidro */
-  --bg-dark: #08090c;
-  --panel-bg: rgba(18, 20, 29, 0.75);
-  --card-bg: rgba(26, 29, 43, 0.6);
+  --bg-dark: #0d0f14;
+  --panel-bg: #141721;
+  --card-bg: rgba(24, 28, 40, 0.7);
   --glass-border: rgba(255, 255, 255, 0.08);
 
-  /* Tipografia & Elevacao */
   --text-main: #f3f4f6;
   --text-muted: #9ca3af;
   --radius-lg: 16px;
   --radius-md: 10px;
-  --shadow-main: 0 10px 30px -5px rgba(0, 0, 0, 0.8);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-main: 0 10px 30px -5px rgba(0, 0, 0, 0.7);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ==========================================================================
-   2. RESET E ESTILOS BASE
-   ========================================================================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 body {
   background-color: var(--bg-dark);
   background-image: 
-    radial-gradient(circle at 15% 20%, rgba(255, 123, 0, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 85% 80%, rgba(0, 242, 254, 0.06) 0%, transparent 45%);
+    radial-gradient(circle at 10% 10%, rgba(255, 123, 0, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(0, 242, 254, 0.05) 0%, transparent 40%);
   background-attachment: fixed;
   color: var(--text-main);
   line-height: 1.6;
-  min-height: 100vh;
 }
 
-/* ==========================================================================
-   3. NAVBAR ULTRA-MODERNA (GLASSMORPHISM)
-   ========================================================================== */
+/* Header & Nav */
 .header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(8, 9, 12, 0.7);
+  background: rgba(13, 15, 20, 0.85);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--glass-border);
 }
 
 .navbar {
-  max-width: 1240px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 1.5rem;
+  padding: 0.9rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .logo a {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: var(--text-main);
   text-decoration: none;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.logo span,
 .logo i {
   color: var(--primary);
-  filter: drop-shadow(0 0 10px var(--primary-glow));
+  font-size: 1.6rem;
 }
 
 .nav-menu {
   display: flex;
-  align-items: center;
-  gap: 2rem;
   list-style: none;
+  gap: 2rem;
 }
 
 .nav-link {
   color: var(--text-muted);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.95rem;
   transition: var(--transition);
-  position: relative;
 }
 
 .nav-link:hover {
   color: var(--text-main);
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: var(--primary);
-  box-shadow: 0 0 8px var(--primary-glow);
-  transition: var(--transition);
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.nav-link:hover::after {
-  width: 100%;
-}
-
-/* ==========================================================================
-   4. BOTÕES COM EFEITO DE NEON & GLOW
-   ========================================================================== */
-button,
-.btn-pedido {
+/* Buttons */
+button, .btn-pedido {
   cursor: pointer;
   border: none;
   border-radius: var(--radius-md);
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.4rem;
   font-weight: 700;
   font-size: 0.9rem;
-  letter-spacing: 0.5px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   text-decoration: none;
   transition: var(--transition);
-  position: relative;
-  overflow: hidden;
 }
 
-.btn-primary,
-.btn-pedido {
-  background: linear-gradient(135deg, var(--primary), #ff4500);
-  color: #000;
+.btn-primary, .btn-pedido {
+  background: linear-gradient(135deg, var(--primary), #e05e00);
+  color: #fff;
   border-radius: 30px;
-  box-shadow: 0 0 20px var(--primary-glow);
 }
 
-.btn-primary:hover,
-.btn-pedido:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 0 30px rgba(255, 123, 0, 0.7);
-  color: #000;
+.btn-primary:hover, .btn-pedido:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--primary-glow);
 }
 
 .btn-secondary {
@@ -166,19 +128,12 @@ button,
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .btn-danger {
-  background: linear-gradient(135deg, var(--danger), #b3003b);
+  background: var(--danger);
   color: #fff;
-  box-shadow: 0 0 15px var(--danger-glow);
-}
-
-.btn-danger:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 25px var(--danger-glow);
 }
 
 .btn-icon {
@@ -192,12 +147,6 @@ button,
   padding: 0;
 }
 
-.btn-icon:hover {
-  background: var(--primary);
-  color: #000;
-  box-shadow: 0 0 15px var(--primary-glow);
-}
-
 #cart-count {
   position: absolute;
   top: -4px;
@@ -205,58 +154,50 @@ button,
   background: var(--danger);
   color: #fff;
   font-size: 0.7rem;
-  font-weight: 800;
   border-radius: 50%;
   width: 20px;
   height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 8px var(--danger);
 }
 
 .btn-block {
   width: 100%;
 }
 
-/* ==========================================================================
-   5. SEÇÃO HERO FUTURISTA
-   ========================================================================== */
+/* Hero */
 .hero {
-  height: 75vh;
+  min-height: 50vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 2rem;
-  position: relative;
-  background: linear-gradient(180deg, rgba(8, 9, 12, 0.4) 0%, var(--bg-dark) 100%),
-              url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1000') center/cover;
+  padding: 4rem 1.5rem;
+  background: linear-gradient(rgba(13, 15, 20, 0.75), var(--bg-dark)),
+              url('https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1200') center/cover;
 }
 
 .hero h1 {
-  font-size: 3.5rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+  background: linear-gradient(135deg, #ffffff 30%, var(--primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.9));
 }
 
 .hero p {
-  font-size: 1.25rem;
   color: var(--text-muted);
-  max-width: 600px;
-  margin-bottom: 2rem;
+  max-width: 550px;
+  font-size: 1.1rem;
+  margin-bottom: 1.8rem;
 }
 
-/* ==========================================================================
-   6. CARDS DO CARDÁPIO & GRID DE PRODUTOS
-   ========================================================================== */
+/* Container & Menu */
 .container {
-  max-width: 1240px;
+  max-width: 1200px;
   margin: 3rem auto;
   padding: 0 1.5rem;
 }
@@ -265,7 +206,6 @@ button,
   font-size: 1.8rem;
   font-weight: 800;
   margin-bottom: 2rem;
-  color: var(--text-main);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -273,12 +213,10 @@ button,
 
 .menu-section h2::before {
   content: '';
-  display: inline-block;
-  width: 6px;
-  height: 28px;
+  width: 5px;
+  height: 26px;
   background: var(--primary);
   border-radius: 4px;
-  box-shadow: 0 0 12px var(--primary-glow);
 }
 
 .menu-grid {
@@ -289,49 +227,41 @@ button,
 
 .card {
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-main);
-  transition: var(--transition);
   display: flex;
   flex-direction: column;
+  transition: var(--transition);
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(255, 123, 0, 0.4);
-  box-shadow: 0 12px 30px -5px rgba(255, 123, 0, 0.25);
+  transform: translateY(-6px);
+  border-color: rgba(255, 123, 0, 0.35);
 }
 
 .card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  transition: var(--transition);
-}
-
-.card:hover img {
-  transform: scale(1.05);
 }
 
 .card-body {
-  padding: 1.5rem;
+  padding: 1.4rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .card-title {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: var(--text-main);
 }
 
 .card-desc {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
   margin-bottom: 1.5rem;
   flex-grow: 1;
@@ -341,25 +271,21 @@ button,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto;
 }
 
 .card-price {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 800;
-  color: var(--secondary);
-  text-shadow: 0 0 10px var(--secondary-glow);
+  color: #fff;
 }
 
-/* ==========================================================================
-   7. MODAIS GLASSMORPHISM & CARRINHO
-   ========================================================================== */
+/* Modals */
 .modal {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(4, 5, 8, 0.85);
-  backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
   z-index: 2000;
   justify-content: center;
   align-items: center;
@@ -368,7 +294,6 @@ button,
 
 .modal.active {
   display: flex;
-  animation: fadeIn 0.25s ease-out;
 }
 
 .modal-content {
@@ -376,15 +301,18 @@ button,
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   width: 100%;
-  max-width: 520px;
+  max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+  box-shadow: var(--shadow-main);
+}
+
+.modal-large {
+  max-width: 800px;
 }
 
 .modal-header {
-  padding: 1.25rem 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
+  padding: 1.2rem 1.5rem;
   border-bottom: 1px solid var(--glass-border);
   display: flex;
   justify-content: space-between;
@@ -392,87 +320,109 @@ button,
 }
 
 .modal-header h3 {
-  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: var(--primary);
-  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 .close-btn {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: var(--text-muted);
   cursor: pointer;
-  transition: var(--transition);
-}
-
-.close-btn:hover {
-  color: var(--danger);
 }
 
 .modal-body {
   padding: 1.5rem;
 }
 
-/* Formulários Futuristas */
+/* Carrinho interno */
+.cart-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+}
+
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.cart-item-controls button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-top: 1px solid var(--glass-border);
+  font-size: 1.2rem;
+}
+
 .checkout-form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1rem;
+}
+
+.checkout-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .checkout-form label {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  text-transform: uppercase;
   color: var(--text-muted);
-  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-.checkout-form input,
-.checkout-form select {
-  padding: 0.8rem 1rem;
-  background: rgba(0, 0, 0, 0.4);
+.checkout-form input, .checkout-form select {
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   color: var(--text-main);
-  font-size: 0.95rem;
   outline: none;
-  transition: var(--transition);
 }
 
-.checkout-form input:focus,
-.checkout-form select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 12px var(--primary-glow);
-}
-
-/* ==========================================================================
-   8. PAINEL ADMIN & TABELAS CYBER
-   ========================================================================== */
+/* Admin Dashboard */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.2rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .kpi-card {
   background: var(--card-bg);
   border: 1px solid var(--glass-border);
-  padding: 1.25rem;
+  padding: 1rem;
   border-radius: var(--radius-md);
-  position: relative;
-  overflow: hidden;
-}
-
-.kpi-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--secondary);
-  box-shadow: 0 0 10px var(--secondary-glow);
+  border-left: 4px solid var(--primary);
 }
 
 .kpi-card h4 {
@@ -482,46 +432,65 @@ button,
 }
 
 .kpi-card p {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  color: var(--text-main);
   margin-top: 0.2rem;
+}
+
+.admin-actions {
+  margin-bottom: 1.5rem;
+}
+
+.section-subtitle {
+  margin-bottom: 0.8rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.table-responsive {
+  overflow-x: auto;
 }
 
 .sales-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
 }
 
 .sales-table th {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--primary);
-  padding: 1rem;
-  font-size: 0.85rem;
-  text-transform: uppercase;
+  padding: 0.8rem;
+  font-size: 0.8rem;
+  text-align: left;
 }
 
 .sales-table td {
-  padding: 1rem;
+  padding: 0.8rem;
   border-bottom: 1px solid var(--glass-border);
-  color: var(--text-main);
+  font-size: 0.85rem;
 }
 
 .report-box {
-  background: rgba(0, 242, 254, 0.03);
-  border: 1px solid rgba(0, 242, 254, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px dashed var(--primary);
   border-radius: var(--radius-md);
   padding: 1.2rem;
   margin-top: 1.5rem;
 }
 
-/* Animações */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
+.report-box pre {
+  font-family: monospace;
+  white-space: pre-wrap;
+  color: #a3e635;
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
 }
 
 .hidden {
   display: none !important;
+}
+
+@media (max-width: 768px) {
+  .nav-menu { display: none; }
 }
