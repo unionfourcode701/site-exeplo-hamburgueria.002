@@ -311,7 +311,7 @@ document.getElementById("form-checkout").addEventListener("submit", (e) => {
   updateDashboard();
 
   // Coloque o número com DDD para o teste ao vivo
-  const phone = "5581999999999"; 
+  const phone = "5581992275530"; 
   const encodedMessage = encodeURIComponent(message);
   window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_blank');
 });
