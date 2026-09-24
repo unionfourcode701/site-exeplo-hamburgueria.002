@@ -1,11 +1,5 @@
 // --- 1. BASE DE DADOS DO CARDÁPIO COM CATEGORIAS ---
-const menuData = [
-  { id: 1, category: "burgers", name: "X-Burguer Artesanal", price: 25.00, desc: "Pão brioche, carne 180g, queijo cheddar e molho especial.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
-  { id: 2, category: "burgers", name: "X-Salada Especial", price: 22.00, desc: "Hamburguer 150g, queijo, alface, tomate e maionese da casa.", img: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400" },
-  { id: 3, category: "acompanhamentos", name: "Batata Frita Grande", price: 16.00, desc: "Porção de batata frita crocante com bacon e cheddar.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" },
-  { id: 4, category: "bebidas", name: "Refrigerante Lata 350ml", price: 6.00, desc: "Coca-Cola, Guaraná ou Soda.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400" },
-  { id: 5, category: "bebidas", name: "Suco Natural 500ml", price: 8.50, desc: "Sabores: Laranja, Limão ou Maracujá.", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=400" }
-];
+let menuData = []; // Agora começa vazio e será preenchido pela API
 
 // --- 2. ESTADO DA APLICAÇÃO ---
 let cart = [];
@@ -37,11 +31,24 @@ const reportText = document.getElementById("report-text");
 
 // --- 4. INICIALIZAÇÃO ---
 document.addEventListener("DOMContentLoaded", () => {
-  renderMenu();
+  carregarCardapioDaAPI(); // Agora puxa do banco de dados!
   setupCategoryFilters();
   updateCart();
   updateDashboard();
 });
+
+// Busca os produtos da API
+async function carregarCardapioDaAPI() {
+  try {
+    const resposta = await fetch("http://127.0.0.1:8000/api/produtos");
+    if (resposta.ok) {
+      menuData = await resposta.json();
+      renderMenu(); // Desenha na tela após puxar da API
+    }
+  } catch (error) {
+    console.error("Erro ao carregar cardápio:", error);
+  }
+}
 
 // Renderizar itens do Cardápio com filtro
 function renderMenu(category = "todos") {
@@ -70,6 +77,35 @@ function renderMenu(category = "todos") {
     menuGrid.appendChild(card);
   });
 }
+
+// Evento para o Dono cadastrar um novo prato
+document.getElementById("form-novo-produto")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const novoProduto = {
+    nome: document.getElementById("prod-nome").value,
+    preco: parseFloat(document.getElementById("prod-preco").value),
+    categoria: document.getElementById("prod-categoria").value,
+    imagem: document.getElementById("prod-imagem").value,
+    descricao: document.getElementById("prod-descricao").value
+  };
+
+  try {
+    const resposta = await fetch("http://127.0.0.1:8000/api/produtos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(novoProduto)
+    });
+
+    if (resposta.ok) {
+      alert("Prato adicionado com sucesso!");
+      document.getElementById("form-novo-produto").reset();
+      carregarCardapioDaAPI(); // Atualiza a tela na hora
+    }
+  } catch (error) {
+    alert("Erro ao salvar o produto.");
+  }
+});
 
 // Ouvintes para os botões de filtro
 function setupCategoryFilters() {
@@ -369,4 +405,117 @@ closeAdmin.addEventListener("click", () => modalAdmin.classList.remove("active")
 window.addEventListener("click", (e) => {
   if (e.target === modalCarrinho) modalCarrinho.classList.remove("active");
   if (e.target === modalAdmin) modalAdmin.classList.remove("active");
+});
+
+// --- 9. LÓGICA DE AUTENTICAÇÃO E ÁREA DO DONO ---
+const modalLogin = document.getElementById("modal-login");
+const btnLoginNav = document.getElementById("btn-login-nav");
+const closeLogin = document.getElementById("close-login");
+const toggleRegister = document.getElementById("toggle-register");
+const registerFields = document.getElementById("register-fields");
+const btnAuthSubmit = document.getElementById("btn-auth-submit");
+const formAuth = document.getElementById("form-auth");
+
+let isRegistering = false;
+
+// Controle do Modal de Login
+btnLoginNav.addEventListener("click", () => modalLogin.classList.add("active"));
+closeLogin.addEventListener("click", () => modalLogin.classList.remove("active"));
+
+// Alternar entre Login e Cadastro
+toggleRegister.addEventListener("click", () => {
+  isRegistering = !isRegistering;
+  if (isRegistering) {
+    registerFields.classList.remove("hidden");
+    btnAuthSubmit.textContent = "Criar Conta";
+    toggleRegister.textContent = "Fazer Login";
+  } else {
+    registerFields.classList.add("hidden");
+    btnAuthSubmit.textContent = "Entrar";
+    toggleRegister.textContent = "Cadastre-se";
+  }
+});
+
+// Comunicação com a API (Login e Cadastro)
+formAuth.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const email = document.getElementById("auth-email").value;
+  const senha = document.getElementById("auth-senha").value;
+  const btnSubmit = document.getElementById("btn-auth-submit");
+  
+  // Muda o texto do botão para mostrar que está a carregar
+  const textoOriginal = btnSubmit.textContent;
+  btnSubmit.textContent = "Aguarde...";
+  btnSubmit.disabled = true;
+
+  try {
+    if (isRegistering) {
+      // --- LÓGICA DE CADASTRO ---
+      const nome = document.getElementById("auth-nome").value;
+      const telefone = document.getElementById("auth-telefone").value;
+      const endereco = document.getElementById("auth-endereco").value;
+
+      const resposta = await fetch("http://127.0.0.1:8000/api/registar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, telefone, endereco, email, senha })
+      });
+
+      if (resposta.ok) {
+        alert("Conta criada com sucesso! Faça login para continuar.");
+        toggleRegister.click(); // Volta para a tela de login
+      } else {
+        const erro = await resposta.json();
+        alert("Erro: " + erro.detail);
+      }
+
+    } else {
+      // --- LÓGICA DE LOGIN ---
+      const resposta = await fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha })
+      });
+
+      if (resposta.ok) {
+        const dadosUsuario = await resposta.json();
+        
+        // Verifica se é o dono
+        if (dadosUsuario.tipo_conta === "dono") {
+          document.getElementById("btn-admin").classList.remove("hidden");
+          btnLoginNav.innerHTML = `<i class="ph ph-user"></i> Dono`;
+          alert(`Bem-vindo, ${dadosUsuario.nome}! O painel de gestão foi liberado.`);
+        } else {
+          // É cliente
+          document.getElementById("btn-admin").classList.add("hidden");
+          btnLoginNav.innerHTML = `<i class="ph ph-user"></i> Minha Conta`;
+          
+          // Preenche os dados do cliente no carrinho automaticamente
+          document.getElementById("client-name").value = dadosUsuario.nome;
+          if(dadosUsuario.endereco) {
+            document.getElementById("client-address").value = dadosUsuario.endereco;
+          }
+          alert(`Bem-vindo, ${dadosUsuario.nome}!`);
+        }
+        
+        modalLogin.classList.remove("active");
+        formAuth.reset();
+      } else {
+        alert("E-mail ou senha incorretos.");
+      }
+    }
+  } catch (error) {
+    alert("Erro ao conectar com o servidor. Verifique se a API está a rodar.");
+    console.error(error);
+  } finally {
+    // Restaura o botão
+    btnSubmit.textContent = textoOriginal;
+    btnSubmit.disabled = false;
+  }
+});
+
+// Fecha modal de login ao clicar fora
+window.addEventListener("click", (e) => {
+  if (e.target === modalLogin) modalLogin.classList.remove("active");
 });

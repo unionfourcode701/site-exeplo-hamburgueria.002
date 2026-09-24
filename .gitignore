@@ -1,0 +1,14 @@
+# Ambientes Virtuais
+venv/
+env/
+
+# Ficheiros compilados do Python
+__pycache__/
+*.pyc
+
+# Bases de dados locais (muito importante para não expor palavras-passe!)
+*.db
+*.sqlite3
+
+# Ficheiros de sistema operativo
+.DS_Store

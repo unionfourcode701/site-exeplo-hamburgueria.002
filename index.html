@@ -28,17 +28,23 @@
         <li><a href="#cardapio" class="nav-link">Cardápio</a></li>
       </ul>
 
+      
       <div class="nav-actions">
         <button id="btn-carrinho" class="btn-icon" title="Ver Carrinho">
           <i class="ph ph-shopping-cart"></i>
           <span id="cart-count">0</span>
         </button>
-        <button id="btn-admin" class="btn-secondary">
-          <i class="ph ph-chart-bar"></i> Gestão do Dia
+        <button id="btn-login-nav" class="btn-secondary">
+          <i class="ph ph-user"></i> Entrar
+        </button>
+        <!-- O botão admin agora fica oculto por padrão -->
+        <button id="btn-admin" class="btn-secondary hidden">
+          <i class="ph ph-chart-bar"></i> Gestão
         </button>
       </div>
-    </div>
-  </header>
+      
+    </div> 
+  </header> 
 
   <!-- Hero Section -->
   <section class="hero" id="home">
@@ -54,10 +60,12 @@
     <section class="menu-section">
       <h2>Nosso Cardápio</h2>
 
-      <!-- Filtros Rápidos por Categoria -->
-      <div class="category-filters">
+     <div class="category-filters">
         <button class="filter-btn active" data-category="todos">
           <i class="ph ph-squares-four"></i> Todos
+        </button>
+        <button class="filter-btn" data-category="combos">
+          <i class="ph ph-bag"></i> Combos
         </button>
         <button class="filter-btn" data-category="burgers">
           <i class="ph ph-hamburger"></i> Hambúrgueres
@@ -67,6 +75,9 @@
         </button>
         <button class="filter-btn" data-category="bebidas">
           <i class="ph ph-brand-revolut"></i> Bebidas
+        </button>
+        <button class="filter-btn" data-category="sobremesas">
+          <i class="ph ph-ice-cream"></i> Sobremesas
         </button>
       </div>
 
@@ -161,51 +172,151 @@
         <span class="close-btn" id="close-admin">&times;</span>
       </div>
       <div class="modal-body">
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <h4>Faturamento Total</h4>
-            <p id="kpi-revenue">R$ 0,00</p>
-          </div>
-          <div class="kpi-card">
-            <h4>Pedidos Realizados</h4>
-            <p id="kpi-orders">0</p>
-          </div>
-          <div class="kpi-card">
-            <h4>Ticket Médio</h4>
-            <p id="kpi-avg">R$ 0,00</p>
-          </div>
-        </div>
-
-        <div class="admin-actions">
-          <button id="btn-close-shift" class="btn-danger">
-            <i class="ph ph-lock-key"></i> Encerrar Expediente Hoje
-          </button>
-        </div>
-
-        <h4 class="section-subtitle">Histórico de Pedidos Registrados</h4>
-        <div class="table-responsive">
-          <table class="sales-table">
-            <thead>
-              <tr>
-                <th>Hora</th>
-                <th>Cliente</th>
-                <th>Tipo</th>
-                <th>Pagamento</th>
-                <th>Itens</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody id="sales-history-body"></tbody>
-          </table>
-        </div>
-
-        <div id="report-output" class="report-box hidden">
-          <h4><i class="ph ph-file-text"></i> Relatório de Fechamento Emitido</h4>
-          <pre id="report-text"></pre>
-        </div>
-      </div>
+  <!-- 1. Bloco de Indicadores (KPIs) -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <h4>Faturamento Total</h4>
+      <p id="kpi-revenue">R$ 0,00</p>
+    </div>
+    <div class="kpi-card">
+      <h4>Pedidos Realizados</h4>
+      <p id="kpi-orders">0</p>
+    </div>
+    <div class="kpi-card">
+      <h4>Ticket Médio</h4>
+      <p id="kpi-avg">R$ 0,00</p>
     </div>
   </div>
+
+  <div class="admin-actions">
+    <button id="btn-close-shift" class="btn-danger">
+      <i class="ph ph-lock-key"></i> Encerrar Expediente Hoje
+    </button>
+  </div>
+
+  <hr style="border-color: var(--glass-border); margin: 1.5rem 0;">
+
+  <!-- 2. Novo Formulário Separado -->
+  <h4 class="section-subtitle"><i class="ph ph-hamburger"></i> Adicionar Novo Prato</h4>
+  <div class="report-box" style="margin-top: 0.5rem; margin-bottom: 1.5rem; background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border);">
+    <form id="form-novo-produto" class="checkout-form">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label>Nome do Produto:</label>
+          <input type="text" id="prod-nome" required placeholder="Ex: X-Bacon">
+        </div>
+        <div class="form-group">
+          <label>Preço (R$):</label>
+          <input type="number" id="prod-preco" step="0.01" required placeholder="Ex: 28.50">
+        </div>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+        <div class="form-group">
+          <label>Categoria:</label>
+          <select id="prod-categoria" required>
+            <option value="burgers">Hambúrgueres</option>
+            <option value="combos">Combos</option>
+            <option value="acompanhamentos">Porções</option>
+            <option value="bebidas">Bebidas</option>
+            <option value="sobremesas">Sobremesas</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>URL da Imagem:</label>
+          <input type="text" id="prod-imagem" required placeholder="Link da foto do prato">
+        </div>
+      </div>
+
+      <div class="form-group mt-2">
+        <label>Descrição:</label>
+        <input type="text" id="prod-descricao" required placeholder="Ingredientes principais...">
+      </div>
+
+      <button type="submit" class="btn-primary btn-block mt-2">Salvar no Banco de Dados</button>
+    </form>
+  </div>
+
+  <hr style="border-color: var(--glass-border); margin: 1.5rem 0;">
+
+  <!-- 3. Tabela de Histórico -->
+  <h4 class="section-subtitle">Histórico de Pedidos Registrados</h4>
+  <div class="table-responsive">
+    <table class="sales-table">
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Cliente</th>
+          <th>Tipo</th>
+          <th>Pagamento</th>
+          <th>Itens</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="sales-history-body"></tbody>
+    </table>
+  </div>
+
+ <div id="report-output" class="report-box hidden">
+        <h4><i class="ph ph-file-text"></i> Relatório de Fechamento Emitido</h4>
+        <pre id="report-text"></pre>
+      </div>
+    </div> 
+  </div> 
+</div> 
+
+<!-- Modal de Autenticação -->
+<div class="modal" id="modal-login">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3><i class="ph ph-user-circle"></i> Acesso ao Sistema</h3>
+      <span class="close-btn" id="close-login">&times;</span>
+    </div>
+    <div class="modal-body">
+      <form id="form-auth" class="checkout-form">
+        <button type="button" class="btn-block btn-google">
+          <i class="ph ph-google-logo"></i> Continuar com o Google
+        </button>
+        
+        <div class="divider"><span>ou</span></div>
+
+        <div class="form-group">
+          <label for="auth-email">E-mail (ou Gmail):</label>
+          <input type="email" id="auth-email" required placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label for="auth-senha">Senha:</label>
+          <input type="password" id="auth-senha" required placeholder="Sua senha">
+        </div>
+        
+        <!-- Campos extras para novos cadastros (Nome, Telefone, Endereço) -->
+        <div id="register-fields" class="hidden">
+          <div class="form-group mt-2">
+            <label for="auth-nome">Nome Completo:</label>
+            <input type="text" id="auth-nome" placeholder="Seu nome">
+          </div>
+          <div class="form-group">
+            <label for="auth-telefone">Telefone (WhatsApp):</label>
+            <input type="tel" id="auth-telefone" placeholder="(00) 00000-0000">
+          </div>
+          <div class="form-group">
+            <label for="auth-endereco">Endereço Principal:</label>
+            <input type="text" id="auth-endereco" placeholder="Rua, Número, Bairro">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary btn-block mt-3" id="btn-auth-submit">Entrar</button>
+        
+        <p class="auth-toggle">
+          Não tem conta? <span id="toggle-register">Cadastre-se</span>
+        </p>
+        <p class="auth-toggle">
+          <span id="toggle-recover">Esqueci minha senha</span>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
 
   <script src="index.js"></script>
 </body>
